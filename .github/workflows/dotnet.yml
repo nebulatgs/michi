@@ -18,10 +18,10 @@ jobs:
       with:
         dotnet-version: 5.0.x
         
-    - name: Generate build number
-      uses: einaregilsson/build-number@v3
-      with:
-        token: ${{secrets.API_TOKEN_GITHUB}}
+    # - name: Generate build number
+    #   uses: einaregilsson/build-number@v3
+    #   with:
+    #     token: ${{secrets.API_TOKEN_GITHUB}}
         
     - name: Restore dependencies
       run: dotnet restore
@@ -38,6 +38,6 @@ jobs:
         destination-branch: main
         git-user: "Actions"
         git-user-email: infinitewormhole@gmail.com
-        git-commit-message: "Automated Build #${BUILD_NUMBER}"
+        git-commit-message: "Automated Build"
         git-commit-sign-off: "false"
         excludes: README.md
