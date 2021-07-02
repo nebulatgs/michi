@@ -12,7 +12,7 @@
     <PackageReference Include="DSharpPlus.Lavalink" Version="4.1.0-nightly-00908" />
     <PackageReference Include="DSharpPlus.Interactivity" Version="4.1.0-nightly-00908" />
     <PackageReference Include="Humanizer.Core" Version="2.11.10" />
-    <PackageReference Include="IDoEverything.DSharpPlus.SlashCommands" Version="1.2.4" />
+    <PackageReference Include="IDoEverything.DSharpPlus.SlashCommands" Version="1.2.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

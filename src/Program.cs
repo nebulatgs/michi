@@ -3,11 +3,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
-using DSharpPlus.Entities;
-using DSharpPlus.EventArgs;
-using DSharpPlus.Interactivity.Enums;
-using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.SlashCommands;
+using Michi.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -18,6 +15,7 @@ namespace Michi
     {
         public static string DBSTRING { get; private set; }
         public static string TOKEN { get; private set; }
+        public static readonly string PREFIX = "&";
         private static IConfiguration config;
         // public static 
         static void Configure()
@@ -48,24 +46,24 @@ namespace Michi
                 Token = TOKEN,
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.All,
+                MinimumLogLevel = LogLevel.Debug
             });
             var services = new ServiceCollection().
                 AddSingleton<Michi.DB.PollContext>().
                 BuildServiceProvider();
-            var slash = discord.UseSlashCommands(new()
+            var cnext = discord.UseCommandsNext(new()
             {
+                StringPrefixes = new[] { PREFIX },
+                EnableDms = true,
                 Services = services
             });
-            slash.RegisterCommands<Modules.ButtonSlash>(844754896358998018);
-            discord.UseInteractivity(new()
-            {
-                PaginationBehaviour = PaginationBehaviour.Ignore,
-                PollBehaviour = PollBehaviour.DeleteEmojis,
-                ResponseBehavior = InteractionResponseBehavior.Ack,
-                Timeout = TimeSpan.FromMinutes(2)
-            });
-            discord.ComponentInteractionCreated += async (client, args) =>
-                await args.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
+            cnext.RegisterCommands(Assembly.GetExecutingAssembly());
+            cnext.SetHelpFormatter<MichiHelpFormatter>();
+            var slash = discord.UseSlashCommands(new() { Services = services });
+
+            // discord.MessageCreated += (client, args) => args.Channel.SendMessageAsync("hi");
+
+            slash.RegisterCommands<Modules.PollSlash>(844754896358998018);
             await discord.ConnectAsync();
             await Task.Delay(-1);
         }

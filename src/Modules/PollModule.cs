@@ -1,33 +1,31 @@
+using System;
 using System.Threading.Tasks;
 using DSharpPlus;
+using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.SlashCommands;
+using Michi.DB;
 
 namespace Michi.Modules
 {
-    public class PollSlash : SlashCommandModule
+    public class PollModule : BaseCommandModule
     {
-        [SlashCommand("create", "Create a new poll")]
-        public async Task CreateCommand(InteractionContext ctx)
+        public PollContext db { get; set; }
+        [Command("createpoll")]
+        [Aliases("startpoll", "create", "poll", "sp")]
+        public async Task AvatarCommand(CommandContext ctx)
         {
-            DiscordFollowupMessageBuilder builder = new();
-            builder.Content = "hi";
-            await ctx.FollowUpAsync(builder);
-        }
-    }
-    public class ButtonSlash : SlashCommandModule
-    {
-        [SlashCommand("buttons", "I'm testing buttons idk")]
-        public async Task ButtonCommand(InteractionContext ctx)
-        {
-            // await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().AddEmbed(hEmbed.embed.Build()));
-            var button = new DiscordButtonComponent(ButtonStyle.Primary, "hello", "test123", false);
-            var builder = new DiscordMessageBuilder().AddComponents(button);
-            builder.WithContent("buttons test");
-            DiscordComponent[] buttons = { button };
-            var interactivity = ctx.Client.GetInteractivity();
-            await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().AddComponents(buttons).WithContent("button test"));
+            // await ctx.RespondAsync("Hi!");
+            // await db.AddAsync(new Poll(){
+            //     GuildId = ctx.Guild.Id,
+            //     ChannelId = ctx.Channel.Id,
+            //     Choice = "One",
+            //     Value = "Two",
+            // });
+            // await db.SaveChangesAsync();
+            await ctx.Guild.CreateApplicationCommandAsync(new DiscordApplicationCommand("test", "test"));
         }
     }
 }
